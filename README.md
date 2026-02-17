@@ -63,7 +63,35 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 2) Build the 5-year base corpus
+### 2) Use prebuilt database snapshot (skip `init`)
+
+If you do not want to run the long initialization step, download the prebuilt SQLite database and place it in `data/`.
+
+Google Drive link:
+
+- `https://drive.google.com/file/d/1EgqobZTRLOVYECX2pPvGNbX8t4WDixw9/view?usp=sharing`
+
+Option A (manual):
+
+- Open the link and download the file.
+- Rename it to `arxiv_insight.db` if needed.
+- Move it to `data/arxiv_insight.db`.
+
+Option B (CLI with `gdown`):
+
+```bash
+mkdir -p data
+pip install gdown
+gdown --fuzzy "https://drive.google.com/file/d/1EgqobZTRLOVYECX2pPvGNbX8t4WDixw9/view?usp=sharing" -O data/arxiv_insight.db
+```
+
+Then run the app directly:
+
+```bash
+streamlit run app.py
+```
+
+### 3) Build the 5-year base corpus (from scratch, optional)
 
 ```bash
 python ingest.py init --years 5 --categories cs.AI cs.LG cs.CV cs.CL
@@ -75,7 +103,7 @@ Notes:
 - It is resumable via checkpoint state in `pipeline_state`.
 - First run can be long due to arXiv rate limits.
 
-### 3) Enrich open-source metadata
+### 4) Enrich open-source metadata
 
 Single batch:
 
@@ -95,7 +123,7 @@ Then recompute scores once:
 python enrich.py recompute
 ```
 
-### 4) Run the app
+### 5) Run the app
 
 ```bash
 streamlit run app.py
